@@ -15,6 +15,8 @@
 
 (function () {
     'use strict';
+    
+    const figlet = require('figlet');
 
     /**
     * Generate and print an opening screen for the game.
@@ -24,7 +26,14 @@
     * @since  1.0.0
     **/
     function openingScreen() {
-        
+        figlet("Hang Man", function(err, data) {
+            if (err) {
+                console.log("Something went wrong with figlet");
+                console.dir(err);
+                return;
+            }
+            console.log(data);
+        });
     }
 
     /**
@@ -50,7 +59,6 @@
     * Let the user guess a letter, check it against the word.
     *
     * @since  1.0.0
-    *
     **/
     function userTurn() {
         
