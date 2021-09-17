@@ -1,0 +1,27 @@
+{
+  "name": "hangman",
+  "version": "1.0.0",
+  "description": "A hanged man game",
+  "main": "hangedMan.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node hangedMan.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/saharlaor/HangMan.git"
+  },
+  "keywords": [
+    "hangman",
+    "hangedman"
+  ],
+  "author": "SaharLaOr",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/saharlaor/HangMan/issues"
+  },
+  "homepage": "https://github.com/saharlaor/HangMan#readme",
+  "dependencies": {
+    "package.json": "^2.0.1"
+  }
+}
