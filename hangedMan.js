@@ -18,21 +18,27 @@
     
     const figlet = require('figlet');
 
+    var isWon = false;
+
     /**
-    * Generate and print an opening screen for the game.
+    * Main function of the game, includes opening screen and the actual game.
     *
     * Print title screen in baloon letters.
     *
     * @since  1.0.0
     **/
-    function openingScreen() {
+    function hangMan() {
+        // Print opening screen
         figlet("Hang Man", function(err, data) {
             if (err) {
                 console.log("Something went wrong with figlet");
                 console.dir(err);
                 return;
-            }
-            console.log(data);
+            } else { console.log(data)};
+
+            // Play the game
+            isWon = startGame();
+            gameOver(isWon);
         });
     }
 
@@ -72,6 +78,8 @@
     * accumulate 10 wrong guesses.
     *
     * @since  1.0.0
+    * 
+    * @returns {boolean} Whether the user won the game
     **/
     function startGame() {
         // Generate a random word
@@ -80,6 +88,5 @@
     }
 
     // Start Game
-    openingScreen();
-    startGame();
+    hangMan();
 })();
