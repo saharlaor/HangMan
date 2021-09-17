@@ -37,6 +37,11 @@
     * @param {boolean}   isWon           Did the user win the game.
     **/
     function gameOver(isWon) {
+        if (isWon) {
+            console.log("Congratulations! you got the word and saved the man");
+        } else {
+            console.log("Game over!\nYou lost");
+        }
     }
 
     /**
