@@ -57,11 +57,11 @@
     function gameOver(isWon) {
         if (isWon) {
             console.log(`Congratulations!
-            You found the word ${word} and saved the man`);
+You found the word ${word} and saved the man`);
         } else {
             console.log(`Game over!
-            You lost
-            The word was ${word}`);
+You lost
+The word was ${word}`);
         }
     }
 
@@ -85,7 +85,6 @@
         do {
             isValidInput = true;
             guess = prompts("Guess a letter: ").toLowerCase();
-            console.log(guess);
             if (guess.length === 0) {
                 isValidInput = false;
                 console.log("You entered nothing, try entering a letter");
@@ -107,7 +106,6 @@
                 continue;
             }
         } while (!isValidInput);
-        console.log();
 
         // Return the guessed letter and whether it exists
         return {
@@ -135,9 +133,7 @@
         // Loop until game over
         while (misses < 10 && hiddenWord != word) {
             // Print game status
-            console.log(hiddenWord);
-            console.log(`You have missed a total of ${misses} times`);
-            console.log("All your guesses: " + guessed.join(", "));
+            console.log("\nThe word is:\n" + hiddenWord + "\n");
             
             // Give the player a turn
             let guessObj = playerTurn(word, guessed);
@@ -153,9 +149,14 @@
                 }
             } else { misses += 1; }
 
+            console.clear();
+            console.log(`You have missed a total of ${misses} times`);
+            console.log("All your guesses: " + guessed.join(", "));
+
             // Update whether the player has won
             isWon = (hiddenWord === word);
         }
+        console.clear();
         return isWon;
     }
 
