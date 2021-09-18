@@ -88,22 +88,15 @@ The word was ${word}`);
             if (guess.length === 0) {
                 isValidInput = false;
                 console.log("You entered nothing, try entering a letter");
-                continue;
-            }
-            if (guess.length != 1) {
+            } else if (guess.length != 1 && guess.length != word.length) {
                 isValidInput = false;
-                console.log("You entered more than one character");
-                continue;
-            }
-            if (!/[a-z]/.test(guess)) {
+                console.log("You entered invalid amount of characters");
+            } else if (!/[a-z]?/.test(guess)) {
                 isValidInput = false;
                 console.log("Your guess consisted of invalid characters");
-                continue;
-            }
-            if (guessed.includes(guess)) {
+            } else if (guessed.includes(guess)) {
                 isValidInput = false;
                 console.log(`You already guessed ${guess}`);
-                continue;
             }
         } while (!isValidInput);
 
@@ -139,13 +132,17 @@ The word was ${word}`);
             let guessObj = playerTurn(word, guessed);
             guessed.push(guessObj.guess);
             if (guessObj.exists) {
-                for (let i = 0; i < word.length; i++) {
-                    if (word[i] === guessObj.guess) {
-                        hiddenWord =
-                            hiddenWord.substring(0, i)
-                            + guessObj.guess
-                            + hiddenWord.substring(i + 1);
+                if (guessObj.guess.length === 1) {
+                    for (let i = 0; i < word.length; i++) {
+                        if (word[i] === guessObj.guess) {
+                            hiddenWord =
+                                hiddenWord.substring(0, i)
+                                + guessObj.guess
+                                + hiddenWord.substring(i + 1);
+                        }
                     }
+                } else if (word == guessObj.guess) {
+                    hiddenWord = word;
                 }
             } else { misses += 1; }
 
