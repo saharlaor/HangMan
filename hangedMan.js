@@ -116,6 +116,8 @@
 
     var isWon = false;
     var word = randomWords();
+    const FONTS = ["Banner", "Big", "Blocks", "Colosal", "Cricket", "Doom", "Def Leppard", "Galactus", "Georgi16", "Rectangles"];
+    let openingScreenFont = FONTS[Math.floor(Math.random() * FONTS.length)]
 
     /**
     * Main function of the game, includes opening screen and the actual game.
@@ -126,7 +128,13 @@
     **/
     function hangMan() {
         // Print opening screen
-        figlet("Hang Man", function(err, data) {
+        figlet("Hang Man", {
+            font: openingScreenFont,
+            horizontalLayout: 'default',
+            verticalLayout: 'default',
+            width: 80,
+            whitespaceBreak: true
+        }, function(err, data) {
             if (err) {
                 console.log("Something went wrong with figlet");
                 console.dir(err);
