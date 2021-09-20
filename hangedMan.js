@@ -20,6 +20,99 @@
     const randomWords = require('random-words');
     const prompts = require('prompt-sync')();
 
+    const hangmanIllustrations  = [`
+
+
+
+
+
+
+
+=========`, `
+
+
+
+
+
+
+      |
+=========`, `
+
+
+
+
+
+      |
+      |
+=========`, `
+
+
+
+
+      |
+      |
+      |
+=========`, `
+
+
+
+      |
+      |
+      |
+      |
+=========`, `
+
+
+      |
+      |
+      |
+      |
+      |
+=========`, `
+       
+      |
+      |
+      |
+      |
+      |
+      |
+=========`, `
+    --+
+      |
+      |
+      |
+      |
+      |
+      |
+=========`, `
+  +---+
+      |
+      |
+      |
+      |
+      |
+      |
+=========`, `
+  +---+
+  |   |
+      |
+      |
+      |
+      |
+      |
+=========`, `
+  +---+
+  |   |
+  O   |
+ /|\\  |
+ / \\  |
+      |
+      |
+=========`, `
+\\O/
+ |
+/ \\ `];
+
     var isWon = false;
     var word = randomWords();
 
@@ -58,10 +151,12 @@
         if (isWon) {
             console.log(`Congratulations!
 You found the word ${word} and saved the man`);
+            console.log(hangmanIllustrations[11]);
         } else {
             console.log(`Game over!
 You lost
 The word was ${word}`);
+            console.log(hangmanIllustrations[10]);
         }
     }
 
@@ -147,6 +242,7 @@ The word was ${word}`);
             } else { misses += 1; }
 
             console.clear();
+            console.log(hangmanIllustrations[misses]);
             console.log(`You have missed a total of ${misses} times`);
             console.log("All your guesses: " + guessed.join(", "));
 
