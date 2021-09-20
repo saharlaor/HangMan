@@ -109,7 +109,8 @@
       |
       |
 =========`, `
-\\O/
+(_)
+\\|/
  |
 / \\ `];
 
@@ -228,13 +229,16 @@ The word was ${word}`);
             guessed.push(guessObj.guess);
             if (guessObj.exists) {
                 if (guessObj.guess.length === 1) {
-                    for (let i = 0; i < word.length; i++) {
-                        if (word[i] === guessObj.guess) {
-                            hiddenWord =
-                                hiddenWord.substring(0, i)
-                                + guessObj.guess
-                                + hiddenWord.substring(i + 1);
-                        }
+                    let tempIndex = word.indexOf(guessObj.guess);
+                    let totalIndex = tempIndex;
+                    while (tempIndex != -1) {
+                        hiddenWord =
+                            hiddenWord.substring(0, totalIndex)
+                            + guessObj.guess
+                            + hiddenWord.substring(totalIndex + 1);
+                        tempIndex = word.substring(totalIndex + 1).indexOf(guessObj.guess);
+                        totalIndex += tempIndex;
+                        console.log(tempIndex);
                     }
                 } else if (word == guessObj.guess) {
                     hiddenWord = word;
@@ -242,9 +246,9 @@ The word was ${word}`);
             } else { misses += 1; }
 
             console.clear();
-            console.log(hangmanIllustrations[misses]);
             console.log(`You have missed a total of ${misses} times`);
             console.log("All your guesses: " + guessed.join(", "));
+            console.log(hangmanIllustrations[misses]);
 
             // Update whether the player has won
             isWon = (hiddenWord === word);
