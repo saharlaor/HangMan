@@ -116,7 +116,7 @@
 
     var isWon = false;
     var word = randomWords();
-    const FONTS = ["Banner", "Big", "Blocks", "Colosal", "Cricket", "Doom", "Def Leppard", "Galactus", "Georgi16", "Rectangles"];
+    const FONTS = ["Banner", "Big", "Blocks", "Colosal", "Cricket", "Doom", "Def Leppard", "Georgi16", "Rectangles", "Speed"];
     let openingScreenFont = FONTS[Math.floor(Math.random() * FONTS.length)]
 
     /**
@@ -245,8 +245,7 @@ The word was ${word}`);
                             + guessObj.guess
                             + hiddenWord.substring(totalIndex + 1);
                         tempIndex = word.substring(totalIndex + 1).indexOf(guessObj.guess);
-                        totalIndex += tempIndex;
-                        console.log(tempIndex);
+                        totalIndex += (tempIndex + 1);
                     }
                 } else if (word == guessObj.guess) {
                     hiddenWord = word;
