@@ -13,21 +13,22 @@
 * @since  1.0.0
 **/
 
-(function () { // CR: if the course hasn't told you otherwise, i would look up how NodeJS suggests implementing a "main" function (require.main)
-    'use strict';
+if (require.main === module) {
+    (function () {
+        'use strict';
 
-    // External packages
-    const figlet = require('figlet');
-    const randomWords = require('random-words');
-    const prompts = require('prompt-sync')();
-    const sleep = require('system-sleep');
+        // External packages
+        const figlet = require('figlet');
+        const randomWords = require('random-words');
+        const prompts = require('prompt-sync')();
+        const sleep = require('system-sleep');
 
-    // Project consts, lets
-    let isWon = false;
-    const word = randomWords();
-    const FONTS = ["Banner", "Big", "Blocks", "Cricket", "Doom", "Def Leppard", "Georgi16", "Rectangles", "Speed"]; // CR: I would remove the bulky fonts, like Def Leppard and Georgi
-    const openingScreenFont = FONTS[Math.floor(Math.random() * FONTS.length)];
-    const hangmanIllustrations  = [`
+        // Project consts, lets
+        let isWon = false;
+        const word = randomWords();
+        const FONTS = ["Banner", "Big", "Blocks", "Cricket", "Doom", "Rectangles", "Speed"];
+        const openingScreenFont = FONTS[Math.floor(Math.random() * FONTS.length)];
+        const hangmanIllustrations  = [`
 
 
 
@@ -76,7 +77,7 @@
       |
       |
 =========`, `
-       
+    
       |
       |
       |
@@ -116,7 +117,7 @@
       |
       |
 =========`];
-    const freemanIllustrations = [`
+        const freemanIllustrations = [`
 
 (_)
 /|\\
@@ -128,165 +129,188 @@
 \\|/
  |
 / \\
-`];
+    `];
 
-    /**
-    * Main function of the game, includes opening screen and the actual game.
-    *
-    * Print title screen in baloon letters.
-    *
-    * @since  1.0.0
-    **/
-    function hangMan() {
-        // Print opening screen
-        figlet("Hang Man", {
-            font: openingScreenFont,
-            horizontalLayout: 'default',
-            verticalLayout: 'default',
-            width: 80,
-            whitespaceBreak: true
-        }, function(err, data) { // CR: handle Ctrl+C exists on prompt without crashing (TypeError: Cannot read property 'toLowerCase' of null)
-            if (err) {
-                console.log("Something went wrong with figlet");
-                console.dir(err);
-                return;
-            } else { console.log(data)};
+        /**
+        * Main function of the game, includes opening screen and the actual game.
+        *
+        * Print title screen in baloon letters.
+        *
+        * @since  1.0.0
+        **/
+        function hangMan() {
+            // Print opening screen
+            figlet("Hang Man", {
+                font: openingScreenFont,
+                horizontalLayout: 'default',
+                verticalLayout: 'default',
+                width: 80,
+                whitespaceBreak: true
+            }, function(err, data) {
+                if (err) {
+                    // Handling ctrl+c
+                    process.on('SIGINT', function () {
+                        console.clear();
+                        console.log("Goodbye");
+                        process.exit();
+                    });
 
-            // Play the game
-            isWon = startGame();
-            gameOver(isWon);
-        });
-    }
+                    console.log("Something went wrong with figlet");
+                    console.dir(err);
+                    return;
+                } else { console.log(data)};
 
-    /**
-    * Handle the end of a game.
-    *
-    * Print a relevant message for the end of the game.
-    *
-    * @since  1.0.0
-    *
-    * @param {boolean}   isWon           Did the player win the game.
-    **/
-    function gameOver(isWon) {
-        if (isWon) {
-            for (let i = 0; i < 15; i++) { // CR: very nice! loved it
-                console.log(`Congratulations!
-You found the word ${word} and saved the man`);
-                console.log(freemanIllustrations[i % 2]);
-                sleep(300);
-                console.clear();
-            }
-            console.log(`You won!
-The word was ${word}`);
-        } else {
-            console.log(`Game over!
-You lost
-The word was ${word}`);
-            console.log(hangmanIllustrations[10]);
+                // Play the game
+                isWon = startGame();
+                gameOver(isWon);
+            });
         }
-    }
 
-    /**
-    * Go through a player's turn.
-    *
-    * Let the player guess a letter, check it against the word.
-    *
-    * @since  1.0.0
-    *
-    * @param {string}   word        The word.
-    * @param {Array}    guessed     An array of guessed letters.
-    * 
-    * @return {Object}  The guess and whether it's in the word
-    **/
-    function playerTurn(word, guessed) {
-        let isValidInput;
-        let guess;
-
-        // Ask player for a letter with validation
-        do {
-            isValidInput = true;
-            guess = prompts("Guess a letter: ").toLowerCase();
-            if (guess.length === 0) {
-                isValidInput = false;
-                console.log("You entered nothing, try entering a letter");
-            } else if (guess.length != 1 && guess.length != word.length) {
-                isValidInput = false;
-                console.log("You entered invalid amount of characters");
-            } else if (!/[a-z]?/.test(guess)) { // CR: Why did you use the lazy quantifier? this makes the test worthless, as it can also match 0 instances (try inputing an illegal character such as a %)
-                isValidInput = false;
-                console.log("Your guess consisted of invalid characters");
-            } else if (guessed.includes(guess)) {
-				// CR: I think its better to check if it's a guessed letter back in startGame. this way you dont have to pass the array, and technically it is a valid input, just a double one.
-                isValidInput = false;
-                console.log(`You already guessed ${guess}`);
-            }
-        } while (!isValidInput);
-
-        // Return the guessed letter and whether it exists
-		// CR: i would go the extra mile here and already check the indexes and return them with the object
-        return {
-            exists: word.indexOf(guess) != -1, // CR: i would not use the word exists as it is usually a built-in term, which can be confusing. call it something like "isInWord" (after all it is a boolean).
-            guess: guess 
-        }
-    }
-
-    /**
-    * Hanged man game.
-    *
-    * Generate a random word, print it opaquely (using '*').
-    * Let the player guess letters until he either wins or
-    * accumulate 10 wrong guesses.
-	* // CR: no documentation of the replacement at all
-    *
-    * @since  1.0.0
-    * 
-    * @return {boolean} Whether the player won the game
-    **/
-    function startGame() { // CR: break it down to functions!!!!
-        let hiddenWord = word.replace(/./g, '*');
-        let guessed = Array();
-        let misses = 0;
-
-        // Loop until game over
-        while (misses < 10 && hiddenWord != word) {
-            // Print game status
-            console.log("\nThe word is:\n" + hiddenWord + "\n");
-            
-            // Give the player a turn
-            let guessObj = playerTurn(word, guessed);
-            guessed.push(guessObj.guess);
-            if (guessObj.exists) {
-                if (guessObj.guess.length === 1) {
-                    let tempIndex = word.indexOf(guessObj.guess);
-                    let totalIndex = tempIndex;
-                    while (tempIndex != -1) { // CR: I would use a for loop that goes over the word matching each letter and finding the relevant indexes, it feels more readable and efficient
-						// CR: add more comments! explain the code flow. (fix everywhere if the code isn't instantly readable.)
-                        //CR: note that if you use a for loop you can avoid this mess by converting the hiddenWord to a list using .split before the loop,
-						//		replacing each matching index, and then converting it back into a string using .join after the loop.
-						hiddenWord =
-                            hiddenWord.substring(0, totalIndex)
-                            + guessObj.guess
-                            + hiddenWord.substring(totalIndex + 1); 
-                        tempIndex = word.substring(totalIndex + 1).indexOf(guessObj.guess);
-                        totalIndex += (tempIndex + 1);
-                    }
-                } else if (word == guessObj.guess) {
-                    hiddenWord = word;
+        /**
+        * Handle the end of a game.
+        *
+        * Print a relevant message for the end of the game.
+        *
+        * @since  1.0.0
+        *
+        * @param {boolean}   isWon           Did the player win the game.
+        **/
+        function gameOver(isWon) {
+            if (isWon) {
+                for (let i = 0; i < 15; i++) {
+                    console.log(`Congratulations!
+    You found the word ${word} and saved the man`);
+                    console.log(freemanIllustrations[i % 2]);
+                    sleep(300);
+                    console.clear();
                 }
-            } else { misses += 1; }
-
-            console.clear();
-            console.log(`You have missed a total of ${misses} times`);
-            console.log("All your guesses: " + guessed.join(", "));  // CR: if the player won in the first round this would be redundant, check the winning before that (perhaps use "break;" if the player won?)
-            console.log(hangmanIllustrations[misses]);
-
-            // Update whether the player has won
-            isWon = (hiddenWord === word); // CR: you are checking this condition twice (one time in the while and the other here), there is no need. find a way to check it once.
+                console.log(`You won!
+    The word was ${word}`);
+            } else {
+                console.log(`Game over!
+    You lost
+    The word was ${word}`);
+                console.log(hangmanIllustrations[10]);
+            }
         }
-        console.clear();
-        return isWon;
-    }
 
-    // Start Game
-    hangMan();
-})();
+        /**
+        * Go through a player's turn.
+        *
+        * Let the player guess a letter, check it against the word.
+        *
+        * @since  1.0.0
+        *
+        * @param {string}   word        The word.
+        * @param {Array}    guessed     An array of guessed letters.
+        * 
+        * @return {Object}  The guess and whether it's in the word
+        **/
+        function playerTurn(word, guessed) {
+            let isValidInput;
+            let guess;
+
+            // Ask player for a letter with validation
+            do {
+                isValidInput = true;
+                guess = prompts("Guess a letter: ").toLowerCase();
+                if (guess.length === 0) {
+                    isValidInput = false;
+                    console.log("You entered nothing, try entering a letter");
+                } else if (guess.length != 1 && guess.length != word.length) {
+                    isValidInput = false;
+                    console.log("You entered invalid amount of characters");
+                } else if (!/[a-z]+/.test(guess)) {
+                    isValidInput = false;
+                    console.log("Your guess consisted of invalid characters");
+                } else if (guessed.includes(guess)) {
+                    isValidInput = false;
+                    console.log(`You already guessed ${guess}`);
+                }
+            } while (!isValidInput);
+
+            // Return the guessed letter and whether it exists
+            return {
+                isInWord: word.indexOf(guess) != -1,
+                guess: guess 
+            }
+        }
+
+        /**
+        * Update the hidden word with all the matches of the player guess.
+        *
+        * In case of a single letter guess, iterate both word and hiddenWord.
+        * If the letter in the index matches the guess, insert to hiddenWord.
+        * In case of whole word guess, check if the guess is the word.
+        *
+        * @since  1.0.0
+        *
+        * @param {string}   word           The word.
+        * @param {string}   hiddenWord     The obscured word.
+        * @param {string}   guess          The player guess.
+        *
+        * @return {string} Updated hiddenWord with guess.
+        **/
+        function updateHiddenWord(word, hiddenWord, guess) {
+            if (guess.length === 1) {
+                // In case the player guessed a single letter
+                for (let i = 0; i < word.length; i++) {
+                    if (word[i] === guess) {
+                        hiddenWord = 
+                        hiddenWord.substring(0, i)
+                        + guess
+                        + hiddenWord.substring(i + 1);
+                    }
+                }
+            } else if (word == guess) {
+                // In case the player guessed the whole word
+                hiddenWord = word;
+            }
+
+            return hiddenWord;
+        }
+
+        /**
+        * Hanged man game.
+        *
+        * Generate a random word, print it opaquely (using '*').
+        * Let the player guess letters until he either wins or
+        * accumulate 10 wrong guesses.
+        *
+        * @since  1.0.0
+        * 
+        * @return {boolean} Whether the player won the game
+        **/
+        function startGame() {
+            let hiddenWord = word.replace(/./g, '*');
+            let guessed = Array();
+            let misses = 0;
+
+            // Loop until game over
+            while (misses < 10 && !isWon) {
+                console.log("\nThe word is:\n" + hiddenWord + "\n");
+                
+                // Give the player a turn
+                let guessObj = playerTurn(word, guessed);
+                guessed.push(guessObj.guess);
+                if (guessObj.isInWord) {
+                    hiddenWord = updateHiddenWord(word, hiddenWord, guessObj.guess);
+                } else { misses += 1; }
+
+                // Print game status
+                console.clear();
+                console.log(`You have missed a total of ${misses} times`);
+                console.log("All your guesses: " + guessed.join(", "));
+                console.log(hangmanIllustrations[misses]);
+
+                // Update whether the player has won
+                isWon = (hiddenWord === word);
+            }
+            console.clear();
+            return isWon;
+        }
+
+        // Start Game
+        hangMan();
+    })();
+}
