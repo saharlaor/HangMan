@@ -15,11 +15,18 @@
 
 (function () {
     'use strict';
-    
+
+    // External packages
     const figlet = require('figlet');
     const randomWords = require('random-words');
     const prompts = require('prompt-sync')();
+    const sleep = require('system-sleep');
 
+    // Project consts, lets
+    let isWon = false;
+    const word = randomWords();
+    const FONTS = ["Banner", "Big", "Blocks", "Cricket", "Doom", "Def Leppard", "Georgi16", "Rectangles", "Speed"];
+    const openingScreenFont = FONTS[Math.floor(Math.random() * FONTS.length)];
     const hangmanIllustrations  = [`
 
 
@@ -108,16 +115,20 @@
  / \\  |
       |
       |
-=========`, `
+=========`];
+    const freemanIllustrations = [`
+
+(_)
+/|\\
+ |
+/ \\
+`, `
+
 (_)
 \\|/
  |
-/ \\ `];
-
-    var isWon = false;
-    var word = randomWords();
-    const FONTS = ["Banner", "Big", "Blocks", "Colosal", "Cricket", "Doom", "Def Leppard", "Georgi16", "Rectangles", "Speed"];
-    let openingScreenFont = FONTS[Math.floor(Math.random() * FONTS.length)]
+/ \\
+`];
 
     /**
     * Main function of the game, includes opening screen and the actual game.
@@ -158,9 +169,15 @@
     **/
     function gameOver(isWon) {
         if (isWon) {
-            console.log(`Congratulations!
+            for (let i = 0; i < 15; i++) {
+                console.log(`Congratulations!
 You found the word ${word} and saved the man`);
-            console.log(hangmanIllustrations[11]);
+                console.log(freemanIllustrations[i % 2]);
+                sleep(300);
+                console.clear();
+            }
+            console.log(`You won!
+The word was ${word}`);
         } else {
             console.log(`Game over!
 You lost
