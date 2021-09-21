@@ -13,7 +13,7 @@
 * @since  1.0.0
 **/
 
-(function () {
+(function () { // CR: if the course hasn't told you otherwise, i would look up how NodeJS suggests implementing a "main" function (require.main)
     'use strict';
 
     // External packages
@@ -25,7 +25,7 @@
     // Project consts, lets
     let isWon = false;
     const word = randomWords();
-    const FONTS = ["Banner", "Big", "Blocks", "Cricket", "Doom", "Def Leppard", "Georgi16", "Rectangles", "Speed"];
+    const FONTS = ["Banner", "Big", "Blocks", "Cricket", "Doom", "Def Leppard", "Georgi16", "Rectangles", "Speed"]; // CR: I would remove the bulky fonts, like Def Leppard and Georgi
     const openingScreenFont = FONTS[Math.floor(Math.random() * FONTS.length)];
     const hangmanIllustrations  = [`
 
@@ -145,7 +145,7 @@
             verticalLayout: 'default',
             width: 80,
             whitespaceBreak: true
-        }, function(err, data) {
+        }, function(err, data) { // CR: handle Ctrl+C exists on prompt without crashing (TypeError: Cannot read property 'toLowerCase' of null)
             if (err) {
                 console.log("Something went wrong with figlet");
                 console.dir(err);
@@ -169,7 +169,7 @@
     **/
     function gameOver(isWon) {
         if (isWon) {
-            for (let i = 0; i < 15; i++) {
+            for (let i = 0; i < 15; i++) { // CR: very nice! loved it
                 console.log(`Congratulations!
 You found the word ${word} and saved the man`);
                 console.log(freemanIllustrations[i % 2]);
@@ -212,19 +212,21 @@ The word was ${word}`);
             } else if (guess.length != 1 && guess.length != word.length) {
                 isValidInput = false;
                 console.log("You entered invalid amount of characters");
-            } else if (!/[a-z]?/.test(guess)) {
+            } else if (!/[a-z]?/.test(guess)) { // CR: Why did you use the lazy quantifier? this makes the test worthless, as it can also match 0 instances (try inputing an illegal character such as a %)
                 isValidInput = false;
                 console.log("Your guess consisted of invalid characters");
             } else if (guessed.includes(guess)) {
+				// CR: I think its better to check if it's a guessed letter back in startGame. this way you dont have to pass the array, and technically it is a valid input, just a double one.
                 isValidInput = false;
                 console.log(`You already guessed ${guess}`);
             }
         } while (!isValidInput);
 
         // Return the guessed letter and whether it exists
+		// CR: i would go the extra mile here and already check the indexes and return them with the object
         return {
-            exists: word.indexOf(guess) != -1,
-            guess: guess
+            exists: word.indexOf(guess) != -1, // CR: i would not use the word exists as it is usually a built-in term, which can be confusing. call it something like "isInWord" (after all it is a boolean).
+            guess: guess 
         }
     }
 
@@ -234,12 +236,13 @@ The word was ${word}`);
     * Generate a random word, print it opaquely (using '*').
     * Let the player guess letters until he either wins or
     * accumulate 10 wrong guesses.
+	* // CR: no documentation of the replacement at all
     *
     * @since  1.0.0
     * 
     * @return {boolean} Whether the player won the game
     **/
-    function startGame() {
+    function startGame() { // CR: break it down to functions!!!!
         let hiddenWord = word.replace(/./g, '*');
         let guessed = Array();
         let misses = 0;
@@ -256,11 +259,14 @@ The word was ${word}`);
                 if (guessObj.guess.length === 1) {
                     let tempIndex = word.indexOf(guessObj.guess);
                     let totalIndex = tempIndex;
-                    while (tempIndex != -1) {
-                        hiddenWord =
+                    while (tempIndex != -1) { // CR: I would use a for loop that goes over the word matching each letter and finding the relevant indexes, it feels more readable and efficient
+						// CR: add more comments! explain the code flow. (fix everywhere if the code isn't instantly readable.)
+                        //CR: note that if you use a for loop you can avoid this mess by converting the hiddenWord to a list using .split before the loop,
+						//		replacing each matching index, and then converting it back into a string using .join after the loop.
+						hiddenWord =
                             hiddenWord.substring(0, totalIndex)
                             + guessObj.guess
-                            + hiddenWord.substring(totalIndex + 1);
+                            + hiddenWord.substring(totalIndex + 1); 
                         tempIndex = word.substring(totalIndex + 1).indexOf(guessObj.guess);
                         totalIndex += (tempIndex + 1);
                     }
@@ -271,11 +277,11 @@ The word was ${word}`);
 
             console.clear();
             console.log(`You have missed a total of ${misses} times`);
-            console.log("All your guesses: " + guessed.join(", "));
+            console.log("All your guesses: " + guessed.join(", "));  // CR: if the player won in the first round this would be redundant, check the winning before that (perhaps use "break;" if the player won?)
             console.log(hangmanIllustrations[misses]);
 
             // Update whether the player has won
-            isWon = (hiddenWord === word);
+            isWon = (hiddenWord === word); // CR: you are checking this condition twice (one time in the while and the other here), there is no need. find a way to check it once.
         }
         console.clear();
         return isWon;
