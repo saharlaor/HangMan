@@ -1,0 +1,75 @@
+.navbar {
+    display: block;
+    height: 1rem;
+    padding: 2rem 1rem;
+    margin: 1rem;
+}
+
+.nav-center {
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+}
+
+.nav-link {
+    margin: 0 0.5rem;
+    font-size: 1rem;
+    font-family: sans-serif;
+    color: #0f172a;
+    text-decoration: none;
+}
+
+.hangedman-div {
+    margin: 20px;
+    height: auto;
+    min-height: 200px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.hangedman-center {
+    border: solid;
+    width: auto;
+    height: auto;
+    padding: 1%;
+}
+
+.hangedman-illustration {
+    font-size: x-large;
+}
+
+.keyboard {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.keyboard-top {
+}
+
+.keboard-middle {
+}
+
+.keyboard-bottom {
+}
+
+.key-row {
+    margin: 7px;
+}
+
+.key {
+    border: solid 2px;
+    border-radius: 20%;
+    margin: 3px;
+    padding: 2px;
+    font-size: xx-large;
+    font-family: system-ui;
+}
+
+.key:hover {
+    background-color: rgb(214, 222, 235);
+    cursor: grab;
+    transition: 350ms;
+}
