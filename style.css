@@ -73,3 +73,9 @@
     cursor: grab;
     transition: 350ms;
 }
+
+.key-hover {
+    background-color: rgb(214, 222, 235);
+    cursor: grab;
+    transition: 150ms;
+}
