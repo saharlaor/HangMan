@@ -89,3 +89,11 @@ body {
     cursor: grab;
     transition: 150ms;
 }
+
+.key-right {
+    background-color: rgb(125, 185, 106);
+}
+
+.key-wrong {
+    background-color: rgb(218, 126, 120);
+}

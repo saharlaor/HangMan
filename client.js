@@ -9,14 +9,25 @@
 * @since  1.0.0
 **/
 
-// Handle keyboard key stroke event
-document.addEventListener("keydown", pressKey);
+// consts & lets
+const word = "ENCYCLOPEDIA";
+let guessedLetters = Array();
+let hiddenWord = document.getElementById("word");
+
+// Set the hidden word
+for (let i = 0; i < word.length; i++) {
+    hiddenWord.innerHTML = hiddenWord.innerText + "_";
+}
+hiddenWord.innerHTML = [...hiddenWord.innerText].join(" ");
 
 // Handle onscreen keyboard key click event
 const keySpans = document.getElementsByClassName("key");
 for (let i = 0; i < keySpans.length; i++) {
     keySpans[i].onclick = clickKey;
 }
+
+// Handle keyboard key stroke event
+document.addEventListener("keydown", pressKey);
 
 /**
 * Handle physical keyboard presses.
@@ -52,5 +63,20 @@ function pressKey(e) {
 *
 **/
 function clickKey() {
-    console.log(this.outerText);
+    const guess = this.outerText;
+    guessedLetters.push(guess);
+
+    if (word.indexOf(guess) === -1) {
+        this.classList.add("key-wrong");
+    } else {
+        this.classList.add("key-right");
+        for (let i = 0; i < word.length; i++) {
+            if (word[i] === guess) {
+                hiddenWord.innerHTML =
+                hiddenWord.innerText.substring(0, i * 2)
+                + guess
+                + hiddenWord.innerText.substring(i * 2 + 1);
+            }
+        }
+    }
 }
