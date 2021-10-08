@@ -208,6 +208,9 @@ for (let i = 0; i < word.length; i++) {
     hiddenWord.innerHTML = hiddenWord.innerText + "_";
 }
 hiddenWord.innerHTML = [...hiddenWord.innerText].join(" ");
+while(!document.readyState) {
+}
+updateIllustration();
 
 // Handle onscreen keyboard key click event
 const keySpans = document.getElementsByClassName("key");
@@ -265,6 +268,34 @@ function clickKey() {
                 hiddenWord.innerText.substring(0, i * 2)
                 + guess
                 + hiddenWord.innerText.substring(i * 2 + 1);
+            }
+        }
+    }
+
+    updateIllustration();
+}
+
+/**
+* Update the illustration of the hangman based on the number of misses.
+*
+* Count the wrong guesses by counting the number of onscreen keys with wron class.
+*
+* @since  1.0.0
+*
+**/
+function updateIllustration() {
+    let misses = document.getElementsByClassName("key-wrong").length;
+    let matrix = document.getElementsByTagName("td");
+    const currentHangman = hangmanIllustrations[misses];
+
+    for (let i = 0; i < currentHangman.length; i++) {
+        for (let j = 0; j < currentHangman[i].length; j++) {
+            if (currentHangman[i][j] == 1) {
+                matrix[currentHangman[i].length * i + j].style.background = "black";
+                console.log("black");
+            } else {
+                matrix[currentHangman[i].length * i + j].style.background = "white";
+                console.log(matrix[currentHangman[i].length + j]);
             }
         }
     }
