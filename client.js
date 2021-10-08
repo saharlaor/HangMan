@@ -273,6 +273,11 @@ function clickKey() {
     }
 
     updateIllustration();
+    if(checkGameOver()) {
+        for (let i = 0; i < keySpans.length; i++) {
+            keySpans[i].onclick = null;
+        }
+    }
 }
 
 /**
@@ -292,11 +297,42 @@ function updateIllustration() {
         for (let j = 0; j < currentHangman[i].length; j++) {
             if (currentHangman[i][j] == 1) {
                 matrix[currentHangman[i].length * i + j].style.background = "black";
-                console.log("black");
             } else {
                 matrix[currentHangman[i].length * i + j].style.background = "white";
-                console.log(matrix[currentHangman[i].length + j]);
             }
         }
     }
+}
+
+/**
+* Check the win/lose conditions and inform player.
+*
+* Check if the user won or lost in the hanged man game,
+* Inform the player that the game is over using an alert.
+*
+* @since  1.0.0
+*
+* @return {Boolean} Is game over.
+**/
+function checkGameOver() {
+    console.log("Check game over");
+
+    let misses = document.getElementsByClassName("key-wrong").length;
+    // Check loss
+    if (misses === 10) {
+        alert(`Game over!
+You lost
+The word was ${word}`);
+        return true;
+    }
+
+    // Check win
+    if (hiddenWord.innerText.indexOf("_") === -1) {
+        alert(`You won!
+The word was ${word}`);
+        return true;
+    }
+
+    // Game is not over
+    return false;
 }
