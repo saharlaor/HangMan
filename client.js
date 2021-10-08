@@ -10,9 +10,12 @@
 **/
 
 // consts & lets
-const word = "ENCYCLOPEDIA";
 let guessedLetters = Array();
 let hiddenWord = document.getElementById("word");
+let word;
+let wordReq = setRandomWord().then(data => {
+    word = data;
+});
 const hangmanIllustrations = [
     // 0
     [[0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
@@ -203,11 +206,32 @@ const hangmanIllustrations = [
     [1, 1, 1, 1, 1, 1, 1, 1, 1, 1]]
 ];
 
-// Set the hidden word
-for (let i = 0; i < word.length; i++) {
-    hiddenWord.innerHTML = hiddenWord.innerText + "_";
+/**
+* Generate a random word and create initial hidden word.
+*
+* fetch a random word from the random word generator api
+* in https://random-word-api.herokuapp.com/word.
+* Once the request is back and set the hidden word for
+* the start of the game.
+*
+* @since  1.0.0
+*
+* @return {String} The randomly generated word.
+**/
+async function setRandomWord() {
+    let response = await fetch('https://random-word-api.herokuapp.com/word');
+    let data = await response.json();
+    let randomWord = data[0].toUpperCase();
+
+    // Set the hidden word
+    for (let i = 0; i < randomWord.length; i++) {
+        hiddenWord.innerHTML = hiddenWord.innerText + "_";
+    }
+    hiddenWord.innerHTML = [...hiddenWord.innerText].join(" ");
+    
+    return randomWord;
 }
-hiddenWord.innerHTML = [...hiddenWord.innerText].join(" ");
+
 while(!document.readyState) {
 }
 updateIllustration();
@@ -315,8 +339,6 @@ function updateIllustration() {
 * @return {Boolean} Is game over.
 **/
 function checkGameOver() {
-    console.log("Check game over");
-
     let misses = document.getElementsByClassName("key-wrong").length;
     // Check loss
     if (misses === 10) {
