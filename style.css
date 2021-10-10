@@ -102,3 +102,26 @@ td {
 .key-wrong {
     background-color: rgb(218, 126, 120);
 }
+
+.help {
+    height: auto;
+    display: flex;
+    flex-flow: column;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.help-center {
+    width: 50%;
+}
+
+.instruction-list {
+    margin-left: 1rem;
+}
+
+.game-description {
+}
+
+.turn-instructions {
+}
