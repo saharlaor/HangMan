@@ -224,6 +224,7 @@ async function setRandomWord() {
     let randomWord = data[0].toUpperCase();
 
     // Set the hidden word
+    hiddenWord.innerHTML = "";
     for (let i = 0; i < randomWord.length; i++) {
         hiddenWord.innerHTML = hiddenWord.innerText + "_";
     }
