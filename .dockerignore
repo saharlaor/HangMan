@@ -1,0 +1,7 @@
+.gitattributes
+.gitignore
+node_modules/
+Dockerfile
+hangedMan.js
+package*
+server.js
