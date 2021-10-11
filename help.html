@@ -10,12 +10,22 @@
 
     <script>
         function toggleDark() {
+            let body = document.getElementsByTagName("body")[0];
             while(!document.readyState) { }
-            document.getElementsByTagName("body")[0].classList.toggle("dark");
+            isDark = body.classList.toggle("dark");
+            window.sessionStorage.setItem("darkMode", isDark);
         }
     </script>
 </head>
 <body>
+    <script>
+        let isDark = window.sessionStorage.getItem("darkMode") === "true";
+        let body = document.getElementsByTagName("body")[0];
+        
+        if (isDark) {
+            toggleDark();
+        }
+    </script>
     <nav class="navbar">
         <div class="nav-center">
             <a href="index.html" class="nav-link">New Game</a>
