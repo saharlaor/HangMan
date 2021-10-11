@@ -23,7 +23,7 @@ td {
 .nav-link {
     margin: 0 0.5rem;
     font-size: 1rem;
-    color: #0f172a;
+    color: inherit;
     text-decoration: none;
 }
 
@@ -45,6 +45,10 @@ td {
 
 .hangedman-illustration {
     font-size: x-large;
+}
+
+.pixel-filled {
+    background-color: black;
 }
 
 .hidden-word {
@@ -124,4 +128,22 @@ td {
 }
 
 .turn-instructions {
+}
+
+/* Dark theme */
+body.dark {
+    color: #34d41B;
+    background-color: #010101;
+}
+
+body.dark .pixel-filled {
+    background-color: #34d41B;
+}
+
+body.dark .key-wrong {
+    background-color: rgb(140, 60, 60);
+}
+
+body.dark .key-right {
+    background-color: rgb(60, 140, 60);
 }

@@ -320,10 +320,13 @@ function updateIllustration() {
 
     for (let i = 0; i < currentHangman.length; i++) {
         for (let j = 0; j < currentHangman[i].length; j++) {
-            if (currentHangman[i][j] == 1) {
-                matrix[currentHangman[i].length * i + j].style.background = "black";
-            } else {
-                matrix[currentHangman[i].length * i + j].style.background = "white";
+            let pixel = matrix[currentHangman[i].length * i + j];
+            if (currentHangman[i][j] === 1) {
+                if (!pixel.classList.contains("pixel-filled")) {
+                    pixel.classList.toggle("pixel-filled");
+                }
+            } else if (pixel.classList.contains("pixel-filled")) {
+                pixel.classList.toggle("pixel-filled");
             }
         }
     }
