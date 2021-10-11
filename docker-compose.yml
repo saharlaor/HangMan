@@ -1,0 +1,7 @@
+version: '3.8'
+services:
+  hangman:
+    image: hangman-server:1.0.0
+    ports:
+      - "80:80"
+      - "443:443"
