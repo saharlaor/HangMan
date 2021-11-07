@@ -146,7 +146,7 @@ if (require.main === module) {
                 verticalLayout: 'default',
                 width: 80,
                 whitespaceBreak: true
-            }, function(err, data) {
+            }, (err, data) => {
                 if (err) {
                     // Handling ctrl+c
                     process.on('SIGINT', function () {

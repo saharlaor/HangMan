@@ -1,3 +1,9 @@
+* {
+    padding: 0px;
+    margin: 0px;
+    box-sizing: border-box;
+}
+
 body {
     font-family: sans-serif;
 }
@@ -5,6 +11,13 @@ body {
 td {
     height: 10px;
     width: 10px;
+}
+
+.game {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    height: 100vh;
 }
 
 .navbar {
@@ -43,9 +56,9 @@ td {
     padding: 1%;
 }
 
-.hangedman-illustration {
+/* .hangedman-illustration {
     font-size: x-large;
-}
+} */
 
 .pixel-filled {
     background-color: black;
@@ -56,7 +69,7 @@ td {
     justify-content: center;
     align-items: center;
     margin: 10px 0;
-    font-size: xx-large;
+    font-size: 2rem;
 }
 
 .keyboard {
@@ -80,31 +93,29 @@ td {
 }
 
 .key {
-    border: solid 2px;
-    border-radius: 20%;
+    display: inline-block;
+    width: 40px;
     margin: 3px;
     padding: 2px;
-    font-size: xx-large;
+    background-color: #f5f5f5;
+    border: solid 2px;
+    border-radius: 20%;
+    font-size: 2rem;
+    text-align: center;
 }
 
 .key:hover {
-    background-color: rgb(214, 222, 235);
+    opacity: 0.7;
     cursor: grab;
     transition: 350ms;
 }
 
-.key-hover {
-    background-color: rgb(214, 222, 235);
-    cursor: grab;
-    transition: 150ms;
-}
-
 .key-right {
-    background-color: rgb(125, 185, 106);
+    background-color: #7db96a;
 }
 
 .key-wrong {
-    background-color: rgb(218, 126, 120);
+    background-color: #ca3d3d;
 }
 
 .help {
@@ -132,18 +143,33 @@ td {
 
 /* Dark theme */
 body.dark {
-    color: #34d41B;
-    background-color: #010101;
+    color: #34d41b;
+    background-color: #121212;
 }
 
 body.dark .pixel-filled {
-    background-color: #34d41B;
+    background-color: #34d41b;
+}
+
+body.dark .key {
+    background-color: #212121;
 }
 
 body.dark .key-wrong {
-    background-color: rgb(140, 60, 60);
+    background-color: #cf6679;
 }
 
 body.dark .key-right {
-    background-color: rgb(60, 140, 60);
+    background-color: #3c8c3c;
+}
+
+@media (max-width: 550px) {
+    .hidden-word {
+        font-size: 1.2rem;
+    }
+    .key {
+        font-size: 1.2rem;
+        width: 26px;
+        margin: 0;
+    }
 }
