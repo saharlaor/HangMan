@@ -1,6 +1,7 @@
 # Imports
 from os import name, system
 from time import sleep
+
 import requests
 
 # Constants
@@ -134,12 +135,13 @@ def player_turn():
 
 
 def is_guess_valid(guess, word, guessed_letters):
-  pass
-  if guess in guessed_letters:
+  if len(guess) != 1:
+    input("Invalid input, Enter A Single Letter")
+    return True
+  elif guess in guessed_letters:
     input("You've Already Guessed {}".format(guess))
     return True
   elif guess not in word:
-    input("{} is not in the hidden word".format(guess))
     return False
   return True
 
@@ -157,13 +159,12 @@ def update_hidden_word(hidden, secret, guess):
 def game_over(word, misses):
   if misses == 10:
     print(HANGMAN_ILLUSTRATIONS[misses])
-    print("The Secret Word Was {}".format(word))
   else:
     for i in range(10):
       clear_screen()
       print(FREEMAN_ILLUSTRATIONS[i % 2])
       sleep(0.3)
-    print("The Secret Word Was {}".format(word))
+  print("The Secret Word Was {}".format(word))
 
 
 def main():
@@ -178,13 +179,6 @@ def main():
     game_status(
       hidden_word, HANGMAN_ILLUSTRATIONS[misses], guessed_letters, misses)
     guess = player_turn()
-    if len(guess) == 0:
-      input("You Have To Enter A Letter, Try Again")
-      continue
-    elif len(guess) > 1:
-      input("You Have To Enter Only A Single Letter, Try Again")
-      misses += 1
-      continue
 
     if is_guess_valid(guess, secret_word, guessed_letters):
       hidden_word = update_hidden_word(hidden_word, secret_word, guess)
